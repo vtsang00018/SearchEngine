@@ -1,15 +1,8 @@
 package com.searchengine.codeu;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.Iterator;
 
 import redis.clients.jedis.Jedis;
 
@@ -22,25 +15,39 @@ public class WikiSearch {
 
     // map from URLs that contain the term(s) to relevance score
     private Map<String, Integer> map;
+    private Integer document_freq;
+    private Map<String, Double> map_TF_IDF;
 
     /**
      * Constructor.
      *
      * @param map
      */
-    public WikiSearch(Map<String, Integer> map) {
+    public WikiSearch(Map<String, Integer> map, int document_freq) {
         this.map = map;
+        this.document_freq = document_freq;
+        this.map_TF_IDF = assign_TF_IDF(map);
     }
 
     /**
-     * Looks up the relevance of a given URL.
+     * Looks up the TD_IDF relevance of a given URL.
      *
      * @param url
      * @return
      */
-    public Integer getRelevance(String url) {
-        Integer relevance = map.get(url);
+    public Double calculate_TF_IDF(String url) {
+        Integer raw_freq = map.get(url);
+        Double relevance = raw_freq * Math.log(raw_freq / document_freq);
         return relevance==null ? 0: relevance;
+    }
+
+    public Map<String, Double> assign_TF_IDF(Map<String, Integer> map_TF){
+        Map<String, Double> map_TF_IDF = new HashMap<String, Double>();
+        for (String url : map_TF.keySet()){
+            Double relevance = calculate_TF_IDF(url);
+            map_TF_IDF.put(url,relevance);
+        }
+        return map_TF_IDF;
     }
 
     /**
@@ -53,22 +60,29 @@ public class WikiSearch {
         }
     }
 
+    private void print_TF_IDF() {
+        List<Entry<String, Double>> entries = sort_TF_IDF();
+        for (Entry<String, Double> entry: entries) {
+            System.out.println(entry);
+        }
+    }
+
     /**
      * Computes the union of two search results.
      *
      * @param that
      * @return New WikiSearch object.
      */
-    public WikiSearch or(WikiSearch that) {
-        Map<String, Integer> intersection = new HashMap<String, Integer>();
-        for (String term: map.keySet()) {
-            if (that.map.containsKey(term)) {
-                int relevance = totalRelevance(this.map.get(term), that.map.get(term));
-                intersection.put(term, relevance);
-            }
-        }
-        return new WikiSearch(intersection);
-    }
+//    public WikiSearch or(WikiSearch that) {
+//        Map<String, Integer> intersection = new HashMap<String, Integer>();
+//        for (String term: map.keySet()) {
+//            if (that.map.containsKey(term)) {
+//                int relevance = totalRelevance(this.map.get(term), that.map.get(term));
+//                intersection.put(term, relevance);
+//            }
+//        }
+//        return new WikiSearch(intersection);
+//    }
 
     /**
      * Computes the intersection of two search results.
@@ -76,21 +90,21 @@ public class WikiSearch {
      * @param that
      * @return New WikiSearch object.
      */
-    public WikiSearch and(WikiSearch that) {
-        Map<String, Integer> temp_map = new HashMap<String, Integer>();
-        Set<String> keys = that.map.keySet();
-
-        for (String key : keys){
-            if (map.containsKey(key)){
-                Integer value1 = map.get(key);
-                Integer value2 = that.map.get(key);
-                Integer total = totalRelevance(value1, value2);
-                temp_map.put(key, total);
-            }
-        }
-        WikiSearch intersection = new WikiSearch(temp_map);
-        return intersection;
-    }
+//    public WikiSearch and(WikiSearch that) {
+//        Map<String, Integer> temp_map = new HashMap<String, Integer>();
+//        Set<String> keys = that.map.keySet();
+//
+//        for (String key : keys){
+//            if (map.containsKey(key)){
+//                Integer value1 = map.get(key);
+//                Integer value2 = that.map.get(key);
+//                Integer total = totalRelevance(value1, value2);
+//                temp_map.put(key, total);
+//            }
+//        }
+//        WikiSearch intersection = new WikiSearch(temp_map);
+//        return intersection;
+//    }
 
     /**
      * Computes the intersection of two search results.
@@ -98,13 +112,13 @@ public class WikiSearch {
      * @param that
      * @return New WikiSearch object.
      */
-    public WikiSearch minus(WikiSearch that) {
-        Map<String, Integer> difference = new HashMap<String, Integer>(map);
-        for (String term: that.map.keySet()) {
-            difference.remove(term);
-        }
-        return new WikiSearch(difference);
-    }
+//    public WikiSearch minus(WikiSearch that) {
+//        Map<String, Integer> difference = new HashMap<String, Integer>(map);
+//        for (String term: that.map.keySet()) {
+//            difference.remove(term);
+//        }
+//        return new WikiSearch(difference);
+//    }
 
     /**
      * Computes the relevance of a search with multiple terms.
@@ -151,6 +165,35 @@ public class WikiSearch {
         return list;
     }
 
+    public List<Entry<String, Double>> sort_TF_IDF() {
+        Comparator<Entry<String, Double>> comparator = new Comparator<Entry<String, Double>>() {
+            @Override
+            public int compare(Entry<String, Double> one, Entry<String, Double> two) {
+                if (one.getValue() < two.getValue()) {
+                    return -1;
+                }
+                if (one.getValue() > two.getValue()) {
+                    return 1;
+                }
+                return 0;
+            }
+        };
+
+        List<Entry<String, Double>> list = new LinkedList<Entry<String, Double>>();
+        // Get a set of the entries
+        Set set = map_TF_IDF.entrySet();
+        // Get an iterator
+        Iterator i = set.iterator();
+        // Display elements
+        while(i.hasNext()) {
+            Entry<String, Double> entry = (Entry<String, Double>)i.next();
+            list.add(entry);
+        }
+        Collections.sort(list, comparator);
+        return list;
+    }
+
+
     /**
      * Performs a search and makes a WikiSearch object.
      *
@@ -160,7 +203,8 @@ public class WikiSearch {
      */
     public static WikiSearch search(String term, JedisIndex index) {
         Map<String, Integer> map = index.getCounts(term);
-        return new WikiSearch(map);
+        int document_freq = index.getDocumentFreq(term);
+        return new WikiSearch(map, document_freq);
     }
 
     public static void main(String[] args) throws IOException {
@@ -173,17 +217,17 @@ public class WikiSearch {
         String term1 = "java";
         System.out.println("Query: " + term1);
         WikiSearch search1 = search(term1, index);
-        search1.print();
+        search1.print_TF_IDF();
 
         // search for the second term
         String term2 = "programming";
         System.out.println("Query: " + term2);
         WikiSearch search2 = search(term2, index);
-        search2.print();
+        search2.print_TF_IDF();
 
         // compute the intersection of the searches
-        System.out.println("Query: " + term1 + " AND " + term2);
-        WikiSearch intersection = search1.and(search2);
-        intersection.print();
+//        System.out.println("Query: " + term1 + " AND " + term2);
+//        WikiSearch intersection = search1.and(search2);
+//        intersection.print();
     }
 }

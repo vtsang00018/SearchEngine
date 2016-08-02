@@ -19,7 +19,6 @@ public class CommandLine {
     @Parameter(names = { "-search" }, description = "Level of verbosity")
     private String terms;
 
-
     public static void main(String[] args) {
         CommandLine jct = new CommandLine();
 
@@ -28,5 +27,7 @@ public class CommandLine {
         String[] argv = {"-search", search_query};
         new JCommander(jct, argv);
         System.out.print(jct.terms);
+
+
     }
 }

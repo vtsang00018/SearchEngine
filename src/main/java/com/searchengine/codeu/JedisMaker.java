@@ -81,6 +81,14 @@ public class JedisMaker {
         return jedis;
     }
 
+    public static Jedis make_local() throws IOException {
+        //Connecting to Redis server on localhost
+        Jedis jedis = new Jedis("localhost");
+        System.out.println("Connection to server sucessfully");
+        //check whether server is running or not
+        System.out.println("Server is running: "+jedis.ping());
+        return jedis;
+    }
 
     /**
      *
@@ -103,7 +111,7 @@ public class JedisMaker {
      */
     public static void main(String[] args) throws IOException {
 
-        Jedis jedis = make();
+        Jedis jedis = make_local();
 
         // String
         jedis.set("mykey", "myvalue");

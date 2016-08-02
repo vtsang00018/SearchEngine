@@ -48,13 +48,14 @@ public class WikiCrawler {
 
     /**
      * Gets a URL from the queue and indexes it.
-     * @param b
      *
      * @return Number of pages indexed.
      * @throws IOException
      */
     public String crawl(boolean testing) throws IOException {
-        if (queue.isEmpty()) {
+        // 20k indexes is around 2.2 gb
+        int threshold = 20000;
+        if (queue.isEmpty() || index.urls_exceeds_threshold(threshold)) {
             return null;
         }
         String url = queue.poll();
@@ -62,7 +63,7 @@ public class WikiCrawler {
 
         if (testing==false && index.isIndexed(url)) {
             System.out.println("Already indexed.");
-            return null;
+            return url;
         }
 
         Elements paragraphs;
@@ -106,27 +107,41 @@ public class WikiCrawler {
         }
     }
 
+    private void queue_seed_urls(String[] urls){
+        for (String url: urls){
+            System.out.println(url);
+            queue.offer(url);
+        }
+    }
+
     public static void main(String[] args) throws IOException {
 
         // make a WikiCrawler
-        Jedis jedis = JedisMaker.make();
+        Jedis jedis = JedisMaker.make_local();
         JedisIndex index = new JedisIndex(jedis);
         String source = "https://en.wikipedia.org/wiki/Java_(programming_language)";
         WikiCrawler wc = new WikiCrawler(source, index);
 
-        // for testing purposes, load up the queue
-        Elements paragraphs = wf.fetchWikipedia(source);
-        wc.queueInternalLinks(paragraphs);
+        System.out.print(wc.index.getURLs().size());
+        System.exit(0);
+//        String[] urls_seeds = {
+//            "https://en.wikipedia.org/wiki/Institute_for_Global_Maritime_Studies",
+//            "https://en.wikipedia.org/wiki/Tufts_University",
+//            "https://en.wikipedia.org/wiki/Harvard_University",
+//            "https://en.wikipedia.org/wiki/Climate_change"
+//        };
+//        wc.queue_seed_urls(urls_seeds);
+//
+//        // loop until we index a new page
+//        String res;
+//        do {
+//            res = wc.crawl(false);
+//        } while (res != null);
 
-        // loop until we index a new page
-        String res;
-        do {
-            res = wc.crawl(false);
-        } while (res == null);
-
-        Map<String, Integer> map = index.getCounts("the");
-        for (Entry<String, Integer> entry: map.entrySet()) {
-            System.out.println(entry);
-        }
+//        Map<String, Integer> map = index.getCounts("the");
+//        for (Entry<String, Integer> entry: map.entrySet()) {
+//            System.out.println(entry);
+//        }
+//      wc.index.printURLs();
     }
 }

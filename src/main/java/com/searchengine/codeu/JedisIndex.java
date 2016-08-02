@@ -71,6 +71,17 @@ public class JedisIndex {
     }
 
     /**
+     * Retrives the document frequencies of a term
+     * @param term
+     * @return
+     */
+    public int getDocumentFreq(String term) {
+
+        Set<String> termDocuments = jedis.smembers(urlSetKey(term));
+        return termDocuments.size();
+    }
+
+    /**
      * Looks up a term and returns a map from URL to count.
      *
      * @param term
@@ -100,7 +111,6 @@ public class JedisIndex {
         String value = jedis.hget(key, term);
         return Integer.parseInt(value);
     }
-
 
     /**
      * Add a page to the index.
@@ -151,6 +161,42 @@ public class JedisIndex {
                 System.out.println("    " + url + " " + count);
             }
         }
+    }
+
+    /**
+     * Prints the URLs that are stored in the indexer
+     */
+    public Set<String> getURLs() {
+        Set<String> termKeys = termCounterKeys();
+        Set<String> urls = new HashSet<String>();
+        for (String key: termKeys) {
+            String[] array = key.split(":");
+            if (array.length < 2) {
+                urls.add("");
+            } else {
+                urls.add(array[1] + ":" + array[2]);
+            }
+        }
+        return urls;
+    }
+
+    /**
+     * Prints the number of urls and what they are
+     */
+    public void printURLs(){
+        Set<String> urls = getURLs();
+        System.out.println(urls.size());
+        for (String url: urls){
+            System.out.println(url);
+        }
+    }
+
+    /**
+     * Checks whether the number of URLs exceed the passed in value
+     */
+    public Boolean urls_exceeds_threshold(int threshold){
+        int num_of_urls = getURLs().size();
+        return num_of_urls > threshold ? true : false;
     }
 
     /**
@@ -249,17 +295,17 @@ public class JedisIndex {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        Jedis jedis = JedisMaker.make();
+        Jedis jedis = JedisMaker.make_local();
         JedisIndex index = new JedisIndex(jedis);
 
         //index.deleteTermCounters();
         //index.deleteURLSets();
         //index.deleteAllKeys();
-        loadIndex(index);
+       //index.loadIndex(index);
 
-        Map<String, Integer> map = index.getCounts("the");
+        Map<String, Integer> map = index.getCounts("bar");
         for (Entry<String, Integer> entry: map.entrySet()) {
-            System.out.println(entry);
+                System.out.println(entry.getKey());
         }
     }
 
