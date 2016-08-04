@@ -10,8 +10,8 @@
   </head>
   <body>
     <h1>Search Engine of Team 39</h1>
-    <form>
-      <input type="text" value="What are you looking for?">
+    <form method="post" action="WikiServletPath">
+      <input type="text" placeholder="What are you looking for?" name="searchTerm">
       <input type="submit">
     </form>
   </body>
