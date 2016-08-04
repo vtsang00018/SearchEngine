@@ -37,8 +37,8 @@ public class WikiSearch {
      */
     public Double calculate_TF_IDF(String url) {
         Integer raw_freq = map.get(url);
-        Double relevance = raw_freq * Math.log(raw_freq / document_freq);
-        return relevance==null ? 0: relevance;
+        Double relevance = raw_freq * Math.log((raw_freq.doubleValue() / document_freq.doubleValue()));
+        return raw_freq == 0 ? 0: relevance;
     }
 
     public Map<String, Double> assign_TF_IDF(Map<String, Integer> map_TF){
@@ -63,7 +63,7 @@ public class WikiSearch {
     private void print_TF_IDF() {
         List<Entry<String, Double>> entries = sort_TF_IDF();
         for (Entry<String, Double> entry: entries) {
-            System.out.println(entry);
+            System.out.println(entry.getKey() + " " + entry.getValue());
         }
     }
 
@@ -170,10 +170,10 @@ public class WikiSearch {
             @Override
             public int compare(Entry<String, Double> one, Entry<String, Double> two) {
                 if (one.getValue() < two.getValue()) {
-                    return -1;
+                    return 1;
                 }
                 if (one.getValue() > two.getValue()) {
-                    return 1;
+                    return -1;
                 }
                 return 0;
             }

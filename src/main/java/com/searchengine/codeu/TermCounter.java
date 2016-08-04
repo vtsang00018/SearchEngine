@@ -1,6 +1,5 @@
 package com.searchengine.codeu;
 
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +8,7 @@ import java.util.Set;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
+import opennlp.tools.stemmer.PorterStemmer;
 
 
 /**
@@ -78,10 +78,13 @@ public class TermCounter {
     public void processText(String text) {
         // replace punctuation with spaces, convert to lower case, and split on whitespace
         String[] array = text.replaceAll("\\pP", " ").toLowerCase().split("\\s+");
+        PorterStemmer stemmer = new PorterStemmer();
 
         for (int i=0; i<array.length; i++) {
             String term = array[i];
-            incrementTermCount(term);
+
+            String stemmed_term = stemmer.stem(term);
+            incrementTermCount(stemmed_term);
         }
     }
 

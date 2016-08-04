@@ -301,7 +301,7 @@ public class JedisIndex {
         //index.deleteTermCounters();
         //index.deleteURLSets();
         //index.deleteAllKeys();
-       //index.loadIndex(index);
+        //index.loadIndex(index);
 
         Map<String, Integer> map = index.getCounts("bar");
         for (Entry<String, Integer> entry: map.entrySet()) {
