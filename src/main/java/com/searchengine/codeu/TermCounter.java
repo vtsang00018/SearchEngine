@@ -10,7 +10,6 @@ import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 import opennlp.tools.stemmer.PorterStemmer;
 
-
 /**
  * Encapsulates a map from search term to frequency (count).
  *

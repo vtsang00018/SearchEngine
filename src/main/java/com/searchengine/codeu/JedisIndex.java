@@ -144,6 +144,11 @@ public class JedisIndex {
         t.exec();
     }
 
+    public Map<String, String> get_url_TC(String url){
+        String key = termCounterKey(url);
+        return jedis.hgetAll(key);
+    }
+
     /**
      * Prints the contents of the index.
      *
@@ -250,6 +255,7 @@ public class JedisIndex {
      * @return
      */
     public void deleteURLSets() {
+
         Set<String> keys = urlSetKeys();
         Transaction t = jedis.multi();
         for (String key: keys) {
