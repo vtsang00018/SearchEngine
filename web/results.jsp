@@ -4,7 +4,9 @@
 <%@ page import="java.io.PrintWriter" %>
 <%@ page import="com.searchengine.codeu.WikiSearch" %>
 <%@ page import="java.util.Map" %>
-<%@ page import="java.util.List" %><%--
+<%@ page import="java.util.List" %>
+<%@ page import="com.searchengine.codeu.WikiFetcher" %>
+<%@ page import="org.jsoup.nodes.Element" %><%--
   Created by IntelliJ IDEA.
   User: aishanibhalla
   Date: 8/5/16
@@ -15,37 +17,71 @@
 <html>
 <head>
     <title>WikiSearch</title>
-    <link rel="stylesheet" type="text/css" href="resources/css/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="resources/css/main.css"/>
-    <script type="text/javascript" src="resources/js/angular.min.js"></script>
-    <script type="text/javascript" src="resources/js/app.js"></script>
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/bootstrap/css/bootstrap.min.css">
+
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css">
+
+
+    <!-- Animate CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/css/animate.css">
+
+    <!-- Owl-Carousel -->
+    <link rel="stylesheet" type="text/css" href="assets/css/owl.carousel.css" >
+    <link rel="stylesheet" type="text/css" href="assets/css/owl.theme.css" >
+    <link rel="stylesheet" type="text/css" href="assets/css/owl.transitions.css" >
+
+    <!-- Materialize CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/css/material.css">
+
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/responsive.css">
+
+
+
+
+    <!-- Colors CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/css/color/blue.css" title="blue">
+
+
+    <!-- Custom Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+
+
+    <!-- Modernizer js -->
+    <script src="assets/js/modernizr.custom.js"></script>
 </head>
-<body>
+<body class="search">
     <%
+        //Get the search term(s) from the form
         String searchTerm = request.getParameter("searchTerm");
 
         Jedis jedis = JedisMaker.make();
         JedisIndex index = new JedisIndex(jedis);
 
-        PrintWriter printWriter = response.getWriter();
-
+        //WikiSearch for getting the terms and WikiFetcher for fetching the heading of each URL
         WikiSearch wSearch = WikiSearch.search(searchTerm, index);
-
-        printWriter.println("<h3>You requested for:"+ searchTerm +"</h3>");
+        WikiFetcher wikiFetcher = new WikiFetcher();
 
         List<Map.Entry<String, Integer>> entries = wSearch.sort();
     %>
-    <ul class="search-list">
-    <%
-        for (Map.Entry<String, Integer> entry: entries) {
-    %>
-    <li class='search-element thumbnail'>
-        <a href='<%entry.getKey();%>'><%entry.getKey();%></a>
-    </li>
-    <%  }
-        printWriter.println("</ul>");
-    %>
-
-    </ul>
+    <div class="page-header"> <h2>You requested for:<strong><%= searchTerm %></strong></h2> </div>
+    <div class="searchResult">
+        <ul class="search-list">
+            <%
+                for (Map.Entry<String, Integer> entry: entries) {
+            %>
+            <li class='search-element well text-center col-md-offset-4'>
+                <a href="<%= entry.getKey()%>" style="font-size: 18px;"><%=wikiFetcher.getHeading(entry.getKey())%></a><br>
+                <%= entry.getKey()%>
+            </li>
+            <%
+                }
+            %>
+        </ul>
+    </div>
 </body>
 </html>
