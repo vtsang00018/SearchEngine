@@ -54,7 +54,7 @@ public class WikiCrawler {
      */
     public String crawl(boolean testing) throws IOException {
         // 20k indexes is around 2.2 gb
-        int threshold = 20000;
+        int threshold = 10;
         if (queue.isEmpty() || index.urls_exceeds_threshold(threshold)) {
             return null;
         }
@@ -118,30 +118,29 @@ public class WikiCrawler {
 
         // make a WikiCrawler
         Jedis jedis = JedisMaker.make_local();
-        JedisIndex index = new JedisIndex(jedis);
+        StopWords stop_words = new StopWords();
+        JedisIndex index = new JedisIndex(jedis, stop_words);
         String source = "https://en.wikipedia.org/wiki/Java_(programming_language)";
         WikiCrawler wc = new WikiCrawler(source, index);
 
-        System.out.print(wc.index.getURLs().size());
-        System.exit(0);
-//        String[] urls_seeds = {
-//            "https://en.wikipedia.org/wiki/Institute_for_Global_Maritime_Studies",
-//            "https://en.wikipedia.org/wiki/Tufts_University",
-//            "https://en.wikipedia.org/wiki/Harvard_University",
-//            "https://en.wikipedia.org/wiki/Climate_change"
-//        };
-//        wc.queue_seed_urls(urls_seeds);
-//
-//        // loop until we index a new page
-//        String res;
-//        do {
-//            res = wc.crawl(false);
-//        } while (res != null);
+        String[] urls_seeds = {
+            "https://en.wikipedia.org/wiki/Institute_for_Global_Maritime_Studies",
+            "https://en.wikipedia.org/wiki/Tufts_University",
+            "https://en.wikipedia.org/wiki/Harvard_University",
+            "https://en.wikipedia.org/wiki/Climate_change"
+        };
+        wc.queue_seed_urls(urls_seeds);
 
-//        Map<String, Integer> map = index.getCounts("the");
-//        for (Entry<String, Integer> entry: map.entrySet()) {
-//            System.out.println(entry);
-//        }
-//      wc.index.printURLs();
+        // loop until we index a new page
+        String res;
+        do {
+            res = wc.crawl(false);
+        } while (res != null);
+
+        Map<String, Integer> map = index.getCounts("the");
+        for (Entry<String, Integer> entry: map.entrySet()) {
+            System.out.println(entry);
+        }
+        wc.index.printURLs();
     }
 }

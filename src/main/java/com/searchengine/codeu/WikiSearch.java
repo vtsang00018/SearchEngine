@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
 
+import org.jblas.DoubleMatrix;
 import redis.clients.jedis.Jedis;
+
+import javax.xml.soap.Text;
 
 
 /**
@@ -207,14 +210,29 @@ public class WikiSearch {
         return new WikiSearch(map, document_freq);
     }
 
+
     public static void main(String[] args) throws IOException {
 
         // make a JedisIndex
-        Jedis jedis = JedisMaker.make();
-        JedisIndex index = new JedisIndex(jedis);
+        Jedis jedis = JedisMaker.make_local();
+
+        StopWords stop_words = new StopWords();
+        JedisIndex index = new JedisIndex(jedis, stop_words);
+        TextParser parser = new TextParser(stop_words);
+
+        JedisUniqueWordIndexer unique_index = new JedisUniqueWordIndexer(jedis);
+        Map<String, String> unique_list = unique_index.getAll();
+
+        TF_IDF tf_idf = new TF_IDF(unique_index, index);
 
         // search for the first term
-        String term1 = "java";
+        String term1 = "java programming";
+        ArrayList<String> query = parser.parse_text(term1);
+
+        DoubleMatrix query_vec = tf_idf.get_query_vector(query);
+
+
+
         System.out.println("Query: " + term1);
         WikiSearch search1 = search(term1, index);
         search1.print_TF_IDF();

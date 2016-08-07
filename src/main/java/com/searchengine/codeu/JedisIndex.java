@@ -21,14 +21,17 @@ import redis.clients.jedis.Transaction;
 public class JedisIndex {
 
     private Jedis jedis;
-
+    private StopWords stop_words;
+    private JedisUniqueWordIndexer unique_words;
     /**
      * Constructor.
      *
      * @param jedis
      */
-    public JedisIndex(Jedis jedis) {
+    public JedisIndex(Jedis jedis, StopWords stop_words) {
+        this.unique_words = new JedisUniqueWordIndexer(jedis);
         this.jedis = jedis;
+        this.stop_words = stop_words;
     }
 
     /**
@@ -119,7 +122,7 @@ public class JedisIndex {
      * @param paragraphs  Collection of elements that should be indexed.
      */
     public void indexPage(String url, Elements paragraphs) {
-        TermCounter tc = new TermCounter(url);
+        TermCounter tc = new TermCounter(url, unique_words, stop_words);
         tc.processElements(paragraphs);
         addURLSet(url, tc);
         addTCSet(url, tc);
@@ -171,13 +174,13 @@ public class JedisIndex {
     /**
      * Prints the URLs that are stored in the indexer
      */
-    public Set<String> getURLs() {
+    public ArrayList<String> getAllURLs() {
         Set<String> termKeys = termCounterKeys();
-        Set<String> urls = new HashSet<String>();
+        ArrayList<String> urls = new ArrayList<String>();
         for (String key: termKeys) {
             String[] array = key.split(":");
             if (array.length < 2) {
-                urls.add("");
+                continue;
             } else {
                 urls.add(array[1] + ":" + array[2]);
             }
@@ -189,7 +192,7 @@ public class JedisIndex {
      * Prints the number of urls and what they are
      */
     public void printURLs(){
-        Set<String> urls = getURLs();
+        ArrayList<String> urls = getAllURLs();
         System.out.println(urls.size());
         for (String url: urls){
             System.out.println(url);
@@ -200,7 +203,7 @@ public class JedisIndex {
      * Checks whether the number of URLs exceed the passed in value
      */
     public Boolean urls_exceeds_threshold(int threshold){
-        int num_of_urls = getURLs().size();
+        int num_of_urls = getAllURLs().size();
         return num_of_urls > threshold ? true : false;
     }
 
@@ -295,6 +298,9 @@ public class JedisIndex {
         }
         t.exec();
     }
+    public void clearDB(){
+        jedis.flushDB();
+    }
 
     /**
      * @param args
@@ -302,17 +308,13 @@ public class JedisIndex {
      */
     public static void main(String[] args) throws IOException {
         Jedis jedis = JedisMaker.make_local();
-        JedisIndex index = new JedisIndex(jedis);
+//        JedisIndex index = new JedisIndex(jedis);
 
         //index.deleteTermCounters();
         //index.deleteURLSets();
-        //index.deleteAllKeys();
+//        index.clearDB();
         //index.loadIndex(index);
 
-        Map<String, Integer> map = index.getCounts("bar");
-        for (Entry<String, Integer> entry: map.entrySet()) {
-                System.out.println(entry.getKey());
-        }
     }
 
     /**

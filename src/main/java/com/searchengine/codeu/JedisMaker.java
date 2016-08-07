@@ -84,9 +84,6 @@ public class JedisMaker {
     public static Jedis make_local() throws IOException {
         //Connecting to Redis server on localhost
         Jedis jedis = new Jedis("localhost");
-        System.out.println("Connection to server sucessfully");
-        //check whether server is running or not
-        System.out.println("Server is running: "+jedis.ping());
         return jedis;
     }
 

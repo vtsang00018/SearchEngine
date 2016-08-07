@@ -9,6 +9,7 @@ import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 import opennlp.tools.stemmer.PorterStemmer;
+import redis.clients.jedis.Jedis;
 
 /**
  * Encapsulates a map from search term to frequency (count).
@@ -20,10 +21,14 @@ public class TermCounter {
 
     private Map<String, Integer> map;
     private String label;
+    private StopWords stop_words;
+    private JedisUniqueWordIndexer unique_words;
 
-    public TermCounter(String label) {
+    public TermCounter(String label, JedisUniqueWordIndexer unique_words, StopWords stop_words) {
         this.label = label;
         this.map = new HashMap<String, Integer>();
+        this.stop_words = stop_words;
+        this.unique_words = unique_words;
     }
 
     public String getLabel() {
@@ -81,9 +86,12 @@ public class TermCounter {
 
         for (int i=0; i<array.length; i++) {
             String term = array[i];
-
+            if (stop_words.words.containsKey(term)){
+                continue;
+            }
             String stemmed_term = stemmer.stem(term);
             incrementTermCount(stemmed_term);
+            unique_words.addUniqueTerm(stemmed_term);
         }
     }
 
@@ -143,14 +151,17 @@ public class TermCounter {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        String url = "https://en.wikipedia.org/wiki/Java_(programming_language)";
+//        String url = "https://en.wikipedia.org/wiki/Java_(programming_language)";
+//
+//        WikiFetcher wf = new WikiFetcher();
+//        Elements paragraphs = wf.fetchWikipedia(url);
+//
+//        TermCounter counter = new TermCounter(url.toString());
+//        counter.processElements(paragraphs);
+//        counter.printCounts();
 
-        WikiFetcher wf = new WikiFetcher();
-        Elements paragraphs = wf.fetchWikipedia(url);
-
-        TermCounter counter = new TermCounter(url.toString());
-        counter.processElements(paragraphs);
-        counter.printCounts();
+        PorterStemmer stemmer = new PorterStemmer();
+        System.out.println(stemmer.stem("giraffe"));
     }
 }
 
