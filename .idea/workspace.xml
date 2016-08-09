@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bd937994-6e70-41bb-88f0-2494f222ed33" name="Default" comment="K">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/searchengine/codeu/TF_IDF.java" afterPath="$PROJECT_DIR$/src/main/java/com/searchengine/codeu/TF_IDF.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/com/searchengine/codeu/JedisIndexTest.java" afterPath="$PROJECT_DIR$/src/test/java/com/searchengine/codeu/JedisIndexTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/com/searchengine/codeu/TF_IDFTest.java" afterPath="$PROJECT_DIR$/src/test/java/com/searchengine/codeu/TF_IDFTest.java" />
-    </list>
+    <list default="true" id="bd937994-6e70-41bb-88f0-2494f222ed33" name="Default" comment="K" />
     <ignored path="SearchEngine.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
