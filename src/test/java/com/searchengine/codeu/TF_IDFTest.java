@@ -3,6 +3,7 @@ package com.searchengine.codeu;
 import org.jblas.DoubleMatrix;
 import org.junit.Before;
 import org.junit.Test;
+import redis.clients.jedis.Jedis;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -13,6 +14,52 @@ import static org.junit.Assert.*;
  * Created by Vincent on 8/4/2016.
  */
 public class TF_IDFTest {
+    @Test
+    public void calculate_TFIDF() throws Exception {
+        Jedis jedis = JedisMaker.make_local();
+
+        StopWords stop_words = new StopWords();
+        JedisIndex index = new JedisIndex(jedis, stop_words);
+
+        JedisUniqueWordIndexer unique_index = new JedisUniqueWordIndexer(jedis);
+        TF_IDF tf_idf = new TF_IDF(unique_index, index);
+
+        ArrayList<String> query_words = new ArrayList<String>();
+        query_words.add(0, "java");
+
+        DoubleMatrix query_vec = tf_idf.get_query_vector(query_words);
+        assert query_vec.rows == 1;
+
+        double[] first = {0, 1, 1, 1};
+        double[] second = {0, 2, 1, 0};
+
+        DoubleMatrix first_row = new DoubleMatrix(first).transpose();
+        DoubleMatrix second_row = new DoubleMatrix(second).transpose();
+        DoubleMatrix final_matrix = DoubleMatrix.concatVertically(first_row, second_row);
+
+        DoubleMatrix test_idf = tf_idf.calculate_TFIDF(final_matrix);
+        test_idf = tf_idf.normalize_rows(test_idf);
+
+        assert test_idf.rows == 1 && test_idf.columns == 4;
+
+        DoubleMatrix doc_diag_matrix = tf_idf.get_diag_matrix(test_idf);
+
+        assert doc_diag_matrix.rows == 4 && doc_diag_matrix.columns == 4;
+        DoubleMatrix product_matrix = tf_idf.matrix_mult(final_matrix, doc_diag_matrix);
+        assert product_matrix.rows == 2 && product_matrix.columns == 4;
+        DoubleMatrix norm_matrix = tf_idf.normalize_rows(product_matrix);
+        System.out.println("COSINE");
+        ArrayList<Double> cosine = tf_idf.cosine_similarity(0,norm_matrix);
+        for (Double i : cosine){
+            System.out.println(i);
+        }
+        System.out.println("COSINE");
+
+        doc_diag_matrix.print();
+
+        test_idf.print();
+    }
+}
 
 //    private Map<String, Integer> unique_terms;
 //    private Map<String, String> document1;
@@ -105,22 +152,13 @@ public class TF_IDFTest {
 //        assert test1.columns == 4;
 //    }
 //
-//    @Test
-//    public void get_query_vector() throws Exception {
-//        ArrayList<String> query_words = new ArrayList<String>();
-//
-//        query_words.add(0, "java");
-//
-//        DoubleMatrix query_vector = matrix.get_query_vector(query_words);
-//
-//        assert query_vector.get(0) == (double)1;
-//    }
-//
+
+
 //    @Test
 //    public void cosine_similarity() throws Exception {
 //        ArrayList<String> query_words = new ArrayList<String>();
 //        query_words.add(0, "java");
-////        query_words.add(1, "programming");
+//        query_words.add(1, "programming");
 //
 //        DoubleMatrix test1 = matrix.get_document_matrix(unique_terms, query_words, all_docs);
 //
@@ -129,5 +167,5 @@ public class TF_IDFTest {
 //            System.out.println(val);
 //        }
 //    }
-
-}
+//
+//}

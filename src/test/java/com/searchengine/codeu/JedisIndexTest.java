@@ -25,19 +25,26 @@ public class JedisIndexTest {
         ArrayList<String> urls = index.getAllURLs();
 
         JedisUniqueWordIndexer unique_index = new JedisUniqueWordIndexer(jedis);
-        Map<String, String> unique_list = unique_index.getAll();
 
         TF_IDF tf_idf = new TF_IDF(unique_index, index);
 
         // search for the first term
-        String term1 = "java programming";
+        String term1 = "java programming language";
         ArrayList<String> query = parser.parse_text(term1);
 
         DoubleMatrix document_matrix = tf_idf.get_document_matrix(query, urls);
+        document_matrix.getRow(0).print();
+        document_matrix.getRow(1).print();
+        document_matrix.getRow(11).print();
+        DoubleMatrix tf_idf_matrix = tf_idf.calculate_TFIDF(document_matrix);
+        DoubleMatrix tf_idf_diag = tf_idf.get_diag_matrix(tf_idf_matrix);
 
+        DoubleMatrix product_matrix = tf_idf.matrix_mult(document_matrix, tf_idf_diag);
+        DoubleMatrix norm_matrix = tf_idf.normalize_rows(product_matrix);
+        ArrayList<Double> cosine = tf_idf.cosine_similarity(0, norm_matrix);
 
-
-
+        for (int i = 0; i < urls.size(); i++){
+            System.out.println(urls.get(i) + ": " + cosine.get(i+1));
+        }
     }
-
 }

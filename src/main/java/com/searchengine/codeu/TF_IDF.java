@@ -6,6 +6,7 @@ import org.jblas.Geometry;
 import java.util.ArrayList;
 import java.util.Map;
 
+import static java.lang.Math.log;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
@@ -40,7 +41,7 @@ public class TF_IDF {
             Integer index = Integer.valueOf(str_index);
             query_vector[index] = query_vector[index] + 1;
         }
-        return new DoubleMatrix(query_vector);
+        return new DoubleMatrix(query_vector).transpose();
     }
 
     /**
@@ -58,7 +59,7 @@ public class TF_IDF {
                 query_vector[index] = Double.parseDouble(url_tc.get(term));
             }
         }
-        return new DoubleMatrix(query_vector);
+        return new DoubleMatrix(query_vector).transpose();
     }
 
     /**
@@ -102,6 +103,22 @@ public class TF_IDF {
     DoubleMatrix get_IDF_diag(double[] idf_vals){
         DoubleMatrix idf_matrix = new DoubleMatrix(idf_vals);
         return get_diag_matrix(idf_matrix);
+    }
+
+    DoubleMatrix calculate_TFIDF(DoubleMatrix doc_vector){
+        int total_docs = doc_vector.getRows();
+        int total_features = doc_vector.getColumns();
+        double[] tf_idf = new double[total_features];
+
+        for(int i = 0; i < total_features; i++){
+            DoubleMatrix col_vec = doc_vector.getColumn(i);
+            int[] test = col_vec.findIndices();
+            double doc_freq = test.length;
+            double idf = log(total_docs / (doc_freq + 1));
+            tf_idf[i] = idf;
+        }
+
+        return new DoubleMatrix(tf_idf).transpose();
     }
 
     ArrayList<Double> cosine_similarity(int row_index, DoubleMatrix m1) {
