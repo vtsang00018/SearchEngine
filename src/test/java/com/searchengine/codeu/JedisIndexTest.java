@@ -17,10 +17,10 @@ public class JedisIndexTest {
     public void main() throws Exception {
         // make a JedisIndex
         Jedis jedis = JedisMaker.make_local();
-
         StopWords stop_words = new StopWords();
         JedisIndex index = new JedisIndex(jedis, stop_words);
         TextParser parser = new TextParser(stop_words);
+
 
         ArrayList<String> urls = index.getAllURLs();
 
@@ -31,17 +31,29 @@ public class JedisIndexTest {
         // search for the first term
         String term1 = "java programming language";
         ArrayList<String> query = parser.parse_text(term1);
-
+        System.out.println("DOC MATRIX");
         DoubleMatrix document_matrix = tf_idf.get_document_matrix(query, urls);
-        document_matrix.getRow(0).print();
-        document_matrix.getRow(1).print();
-        document_matrix.getRow(11).print();
-        DoubleMatrix tf_idf_matrix = tf_idf.calculate_TFIDF(document_matrix);
-        DoubleMatrix tf_idf_diag = tf_idf.get_diag_matrix(tf_idf_matrix);
+        for (int i = 0; i < document_matrix.rows; i++){
+            document_matrix.getRow(i).print();
+        }
 
-        DoubleMatrix product_matrix = tf_idf.matrix_mult(document_matrix, tf_idf_diag);
-        DoubleMatrix norm_matrix = tf_idf.normalize_rows(product_matrix);
-        ArrayList<Double> cosine = tf_idf.cosine_similarity(0, norm_matrix);
+        assert true;
+        System.out.println("TFIDF");
+        DoubleMatrix tf_idf_matrix = tf_idf.calculate_TFIDF(document_matrix);
+        for (int i = 0; i < tf_idf_matrix.rows; i++){
+            tf_idf_matrix.getRow(i).print();
+        }
+        System.out.println("MULT");
+        DoubleMatrix mult = document_matrix.mulRowVector(tf_idf_matrix);
+        for (int i = 0; i < mult.rows; i++){
+            mult.getRow(i).print();
+        }
+
+//        DoubleMatrix tf_idf_diag = tf_idf.get_diag_matrix(tf_idf_matrix);
+//
+//        DoubleMatrix product_matrix = tf_idf.matrix_mult(document_matrix, tf_idf_diag);
+//        DoubleMatrix norm_matrix = tf_idf.normalize_rows(product_matrix);
+        ArrayList<Double> cosine = tf_idf.cosine_similarity(0, mult);
 
         for (int i = 0; i < urls.size(); i++){
             System.out.println(urls.get(i) + ": " + cosine.get(i+1));

@@ -30,18 +30,15 @@ public class TF_IDF {
      * @return vector representation of query
      */
     DoubleMatrix get_query_vector(ArrayList<String> query_words){
-        int num_features = unique_words.size();
+        int num_features = query_words.size();
         double[] query_vector = new double[num_features];
 
-        for (String word : query_words){
-            String str_index = unique_words.get(word);
-            if (str_index.equals(null)){
-                continue;
-            }
-            Integer index = Integer.valueOf(str_index);
+        for (int index = 0; index < num_features; index++){
             query_vector[index] = query_vector[index] + 1;
         }
-        return new DoubleMatrix(query_vector).transpose();
+        DoubleMatrix query_vec = new DoubleMatrix(query_vector).transpose();
+        query_vec = normalize_rows(query_vec);
+        return query_vec;
     }
 
     /**
@@ -49,17 +46,27 @@ public class TF_IDF {
      * @param url_tc termcounter mapping from all terms to their freq for the document
      * @return vector version of document
      */
-    DoubleMatrix get_document_vector(Map<String, String> url_tc){
-        int num_features = unique_words.size();
+    DoubleMatrix get_document_vector(Map<String, String> url_tc, ArrayList<String> query_words){
+        int num_features = query_words.size();
         double[] query_vector = new double[num_features];
 
-        for (String term : url_tc.keySet()){
-            Integer index = Integer.valueOf(unique_words.get(term));
-            if (index != null){
-                query_vector[index] = Double.parseDouble(url_tc.get(term));
+        for (int i = 0; i < num_features; i++) {
+            String query = query_words.get(i);
+            String term_freq = url_tc.get(query);
+            if (term_freq != null){
+                query_vector[i] = Double.parseDouble(term_freq);
+            } else {
+                double zero = 0.0;
+                query_vector[i] = zero;
             }
         }
-        return new DoubleMatrix(query_vector).transpose();
+
+        DoubleMatrix doc_vec = new DoubleMatrix(query_vector).transpose();
+        if (doc_vec.findIndices().length == 0){
+            return new DoubleMatrix().zeros(num_features);
+        }
+        doc_vec = normalize_rows(doc_vec);
+        return normalize_rows(doc_vec);
     }
 
     /**
@@ -70,7 +77,7 @@ public class TF_IDF {
      */
     DoubleMatrix get_document_matrix(ArrayList<String> query_words,
                                      ArrayList<String> urls){
-        int num_features = unique_words.size();
+        int num_features = query_words.size();
         int num_rows = urls.size() + 1;
         DoubleMatrix doc_matrix = DoubleMatrix.zeros(num_rows, num_features);
 
@@ -80,7 +87,7 @@ public class TF_IDF {
         int row = 1;
         for (String document : urls){
             Map<String, String> doc = index.get_url_TC(document);
-            DoubleMatrix row_vector = get_document_vector(doc);
+            DoubleMatrix row_vector = get_document_vector(doc, query_words);
             doc_matrix.putRow(row, row_vector);
             row = row + 1;
         }
@@ -114,7 +121,7 @@ public class TF_IDF {
             DoubleMatrix col_vec = doc_vector.getColumn(i);
             int[] test = col_vec.findIndices();
             double doc_freq = test.length;
-            double idf = log(total_docs / (doc_freq + 1));
+            double idf = log((total_docs - 1) / (doc_freq));
             tf_idf[i] = idf;
         }
 
@@ -122,20 +129,31 @@ public class TF_IDF {
     }
 
     ArrayList<Double> cosine_similarity(int row_index, DoubleMatrix m1) {
-        double dot_product = 0.0, first_norm = 0.0, second_norm = 0.0;
-        double cosin_similarity;
+
+        Double cosin_similarity;
         int num_rows = m1.rows;
         int num_cols = m1.columns;
 
         ArrayList<Double> similar_rows = new ArrayList<Double>();
 
+        System.out.println("COSINE SIM");
         for(int row = 0; row < num_rows; row++){
+            double dot_product = 0.0, first_norm = 0.0, second_norm = 0.0;
             for (int column = 0; column < num_cols; column++) {
                 dot_product += (m1.get(row_index, column) * m1.get(row, column));
                 first_norm += pow(m1.get(row_index, column),2);
                 second_norm += pow(m1.get(row, column), 2);
             }
-            cosin_similarity = (dot_product / (sqrt(first_norm) * sqrt(second_norm)));
+            double denom = (sqrt(first_norm) * sqrt(second_norm));
+            System.out.println("DOT AND DENOM");
+            System.out.println(dot_product);
+            System.out.println(denom);
+            System.out.println("DOT AND DENOM END");
+            cosin_similarity = dot_product /(sqrt(first_norm) * sqrt(second_norm));
+            if(cosin_similarity.isNaN()){
+                cosin_similarity = 0.0;
+            }
+            System.out.println(cosin_similarity);
             similar_rows.add(row, cosin_similarity);
         }
         return similar_rows;

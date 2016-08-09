@@ -26,9 +26,10 @@ public class TF_IDFTest {
 
         ArrayList<String> query_words = new ArrayList<String>();
         query_words.add(0, "java");
+        query_words.add(1, "programming");
 
         DoubleMatrix query_vec = tf_idf.get_query_vector(query_words);
-        assert query_vec.rows == 1;
+        query_vec.print();
 
         double[] first = {0, 1, 1, 1};
         double[] second = {0, 2, 1, 0};
