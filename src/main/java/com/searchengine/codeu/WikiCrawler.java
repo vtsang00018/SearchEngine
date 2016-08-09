@@ -48,13 +48,14 @@ public class WikiCrawler {
 
     /**
      * Gets a URL from the queue and indexes it.
-     * @param b
      *
      * @return Number of pages indexed.
      * @throws IOException
      */
     public String crawl(boolean testing) throws IOException {
-        if (queue.isEmpty()) {
+        // 20k indexes is around 2.2 gb
+        int threshold = 60;
+        if (queue.isEmpty() || index.urls_exceeds_threshold(threshold)) {
             return null;
         }
         String url = queue.poll();
@@ -62,7 +63,7 @@ public class WikiCrawler {
 
         if (testing==false && index.isIndexed(url)) {
             System.out.println("Already indexed.");
-            return null;
+            return url;
         }
 
         Elements paragraphs;
@@ -106,27 +107,49 @@ public class WikiCrawler {
         }
     }
 
+    private void queue_seed_urls(String[] urls){
+        for (String url: urls){
+            System.out.println(url);
+            queue.offer(url);
+        }
+    }
+
     public static void main(String[] args) throws IOException {
 
         // make a WikiCrawler
-        Jedis jedis = JedisMaker.make();
-        JedisIndex index = new JedisIndex(jedis);
+        Jedis jedis = JedisMaker.make_local();
+        StopWords stop_words = new StopWords();
+        JedisIndex index = new JedisIndex(jedis, stop_words);
         String source = "https://en.wikipedia.org/wiki/Java_(programming_language)";
         WikiCrawler wc = new WikiCrawler(source, index);
 
-        // for testing purposes, load up the queue
-        Elements paragraphs = wf.fetchWikipedia(source);
-        wc.queueInternalLinks(paragraphs);
+        String[] urls_seeds = {
+//            "https://en.wikipedia.org/wiki/Institute_for_Global_Maritime_Studies",
+//            "https://en.wikipedia.org/wiki/Tufts_University",
+//            "https://en.wikipedia.org/wiki/Harvard_University",
+//            "https://en.wikipedia.org/wiki/Climate_change",
+//            "https://en.wikipedia.org/wiki/Apple",
+//            "https://en.wikipedia.org/wiki/Tiger",
+//            "https://en.wikipedia.org/wiki/University_at_Buffalo",
+//            "https://en.wikipedia.org/wiki/Java_virtual_machine",
+//            "https://en.wikipedia.org/wiki/Giraffe"
+//              "https://en.wikipedia.org/wiki/Purple",
+//                "https://en.wikipedia.org/wiki/Rose",
+//                "https://en.wikipedia.org/wiki/Wine",
+                "https://en.wikipedia.org/wiki/Google"
+        };
+        wc.queue_seed_urls(urls_seeds);
 
         // loop until we index a new page
         String res;
         do {
             res = wc.crawl(false);
-        } while (res == null);
+        } while (res != null);
 
         Map<String, Integer> map = index.getCounts("the");
         for (Entry<String, Integer> entry: map.entrySet()) {
             System.out.println(entry);
         }
+        wc.index.printURLs();
     }
 }

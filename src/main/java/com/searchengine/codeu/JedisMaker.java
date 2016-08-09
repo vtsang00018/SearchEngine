@@ -16,6 +16,7 @@ import redis.clients.jedis.Jedis;
 
 public class JedisMaker {
 
+
     /**
      * Make a Jedis object and authenticate it.
      *
@@ -81,6 +82,11 @@ public class JedisMaker {
         return jedis;
     }
 
+    public static Jedis make_local() throws IOException {
+        //Connecting to Redis server on localhost
+        Jedis jedis = new Jedis("localhost");
+        return jedis;
+    }
 
     /**
      *
@@ -103,7 +109,7 @@ public class JedisMaker {
      */
     public static void main(String[] args) throws IOException {
 
-        Jedis jedis = make();
+        Jedis jedis = make_local();
 
         // String
         jedis.set("mykey", "myvalue");

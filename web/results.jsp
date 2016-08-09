@@ -1,12 +1,12 @@
 <%@ page import="redis.clients.jedis.Jedis" %>
-<%@ page import="com.searchengine.codeu.JedisMaker" %>
-<%@ page import="com.searchengine.codeu.JedisIndex" %>
 <%@ page import="java.io.PrintWriter" %>
-<%@ page import="com.searchengine.codeu.WikiSearch" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.searchengine.codeu.WikiFetcher" %>
-<%@ page import="org.jsoup.nodes.Element" %><%--
+<%@ page import="org.jsoup.nodes.Element" %>
+<%@ page import="com.searchengine.codeu.*" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="org.jblas.DoubleMatrix" %>
+<%@ page import="java.util.HashMap" %><%--
   Created by IntelliJ IDEA.
   User: aishanibhalla
   Date: 8/5/16
@@ -59,20 +59,42 @@
         //Get the search term(s) from the form
         String searchTerm = request.getParameter("searchTerm");
 
-        Jedis jedis = JedisMaker.make();
-        JedisIndex index = new JedisIndex(jedis);
+        Jedis jedis = JedisMaker.make_local();
+        StopWords stop_words = new StopWords();
+        JedisIndex index = new JedisIndex(jedis, stop_words);
+        TextParser parser = new TextParser(stop_words);
 
+        ArrayList<String> urls = index.getAllURLs();
+        JedisUniqueWordIndexer unique_index = new JedisUniqueWordIndexer(jedis);
+
+        TF_IDF tf_idf = new TF_IDF(unique_index, index);
         //WikiSearch for getting the terms and WikiFetcher for fetching the heading of each URL
-        WikiSearch wSearch = WikiSearch.search(searchTerm, index);
+
+        ArrayList<String> query = parser.parse_text(searchTerm);
+
+        DoubleMatrix document_matrix = tf_idf.get_document_matrix(query, urls);
+        DoubleMatrix tf_idf_matrix = tf_idf.calculate_TFIDF(document_matrix);
+        DoubleMatrix prod = document_matrix.mulRowVector(tf_idf_matrix);
+
+        DoubleMatrix norm_matrix = tf_idf.normalize_rows(prod);
+        ArrayList<Double> cosine = tf_idf.cosine_similarity(0, norm_matrix);
+
+        Map<String, Double> urls_relevance = new HashMap<String, Double>();
+        for (int i = 0; i < urls.size(); i++){
+            urls_relevance.put(urls.get(i), cosine.get(i+1));
+        }
+        WikiSearch wSearch = new WikiSearch(urls_relevance);
+
+        //WikiSearch wSearch = WikiSearch.search(searchTerm, index);
         WikiFetcher wikiFetcher = new WikiFetcher();
 
-        List<Map.Entry<String, Integer>> entries = wSearch.sort();
+        List<Map.Entry<String, Double>> entries = wSearch.sort_TF_IDF();
     %>
     <div class="page-header"> <h2>You requested for:<strong><%= searchTerm %></strong></h2> </div>
     <div class="searchResult">
         <ul class="search-list">
             <%
-                for (Map.Entry<String, Integer> entry: entries) {
+                for (Map.Entry<String, Double> entry: entries) {
             %>
             <li class='search-element well text-center col-md-offset-4'>
                 <a href="<%= entry.getKey()%>" style="font-size: 18px;"><%=wikiFetcher.getHeading(entry.getKey())%></a><br>
