@@ -17,8 +17,6 @@ import javax.xml.soap.Text;
 public class WikiSearch {
 
     // map from URLs that contain the term(s) to relevance score
-    private Map<String, Integer> map;
-    private Integer document_freq;
     private Map<String, Double> map_TF_IDF;
 
     /**
@@ -26,10 +24,8 @@ public class WikiSearch {
      *
      * @param map
      */
-    public WikiSearch(Map<String, Integer> map, int document_freq) {
-        this.map = map;
-        this.document_freq = document_freq;
-        this.map_TF_IDF = assign_TF_IDF(map);
+    public WikiSearch(Map<String, Double> map) {
+        this.map_TF_IDF = map;
     }
 
     /**
@@ -38,32 +34,19 @@ public class WikiSearch {
      * @param url
      * @return
      */
-    public Double calculate_TF_IDF(String url) {
-        Integer raw_freq = map.get(url);
-        Double relevance = raw_freq * Math.log((raw_freq.doubleValue() / document_freq.doubleValue()));
-        return raw_freq == 0 ? 0: relevance;
-    }
 
-    public Map<String, Double> assign_TF_IDF(Map<String, Integer> map_TF){
-        Map<String, Double> map_TF_IDF = new HashMap<String, Double>();
-        for (String url : map_TF.keySet()){
-            Double relevance = calculate_TF_IDF(url);
-            map_TF_IDF.put(url,relevance);
-        }
-        return map_TF_IDF;
-    }
 
     /**
      * Prints the contents in order of term frequency.
      */
-    private void print() {
-        List<Entry<String, Integer>> entries = sort();
-        for (Entry<String, Integer> entry: entries) {
-            System.out.println(entry);
-        }
-    }
+//    private void print() {
+//        List<Entry<String, Integer>> entries = sort();
+//        for (Entry<String, Integer> entry: entries) {
+//            System.out.println(entry);
+//        }
+//    }
 
-    private void print_TF_IDF() {
+    public void print_TF_IDF() {
         List<Entry<String, Double>> entries = sort_TF_IDF();
         for (Entry<String, Double> entry: entries) {
             System.out.println(entry.getKey() + " " + entry.getValue());
@@ -135,38 +118,38 @@ public class WikiSearch {
         return rel1 + rel2;
     }
 
-    /**
-     * Sort the results by relevance.
-     *
-     * @return List of entries with URL and relevance.
-     */
-    public List<Entry<String, Integer>> sort() {
-        Comparator<Entry<String, Integer>> comparator = new Comparator<Entry<String, Integer>>() {
-            @Override
-            public int compare(Entry<String, Integer> one, Entry<String, Integer> two) {
-                if (one.getValue() < two.getValue()) {
-                    return -1;
-                }
-                if (one.getValue() > two.getValue()) {
-                    return 1;
-                }
-                return 0;
-            }
-        };
-
-        List<Entry<String, Integer>> list = new LinkedList<Entry<String, Integer>>();
-        // Get a set of the entries
-        Set set = map.entrySet();
-        // Get an iterator
-        Iterator i = set.iterator();
-        // Display elements
-        while(i.hasNext()) {
-            Entry<String, Integer> entry = (Entry<String, Integer>)i.next();
-            list.add(entry);
-        }
-        Collections.sort(list, comparator);
-        return list;
-    }
+//    /**
+//     * Sort the results by relevance.
+//     *
+//     * @return List of entries with URL and relevance.
+//     */
+//    public List<Entry<String, Integer>> sort() {
+//        Comparator<Entry<String, Integer>> comparator = new Comparator<Entry<String, Integer>>() {
+//            @Override
+//            public int compare(Entry<String, Integer> one, Entry<String, Integer> two) {
+//                if (one.getValue() < two.getValue()) {
+//                    return -1;
+//                }
+//                if (one.getValue() > two.getValue()) {
+//                    return 1;
+//                }
+//                return 0;
+//            }
+//        };
+//
+//        List<Entry<String, Integer>> list = new LinkedList<Entry<String, Integer>>();
+//        // Get a set of the entries
+//        Set set = map.entrySet();
+//        // Get an iterator
+//        Iterator i = set.iterator();
+//        // Display elements
+//        while(i.hasNext()) {
+//            Entry<String, Integer> entry = (Entry<String, Integer>)i.next();
+//            list.add(entry);
+//        }
+//        Collections.sort(list, comparator);
+//        return list;
+//    }
 
     public List<Entry<String, Double>> sort_TF_IDF() {
         Comparator<Entry<String, Double>> comparator = new Comparator<Entry<String, Double>>() {
@@ -200,14 +183,11 @@ public class WikiSearch {
     /**
      * Performs a search and makes a WikiSearch object.
      *
-     * @param term
-     * @param index
+     * @param map
      * @return
      */
-    public static WikiSearch search(String term, JedisIndex index) {
-        Map<String, Integer> map = index.getCounts(term);
-        int document_freq = index.getDocumentFreq(term);
-        return new WikiSearch(map, document_freq);
+    public static WikiSearch search(Map<String, Double> map) {
+        return new WikiSearch(map);
     }
 
 
@@ -229,19 +209,18 @@ public class WikiSearch {
         String term1 = "java programming";
         ArrayList<String> query = parser.parse_text(term1);
 
-        DoubleMatrix query_vec = tf_idf.get_query_vector(query);
+//        WikiSearch search1 = search(term1, index);
 
-
-
-        System.out.println("Query: " + term1);
-        WikiSearch search1 = search(term1, index);
-        search1.print_TF_IDF();
-
-        // search for the second term
-        String term2 = "programming";
-        System.out.println("Query: " + term2);
-        WikiSearch search2 = search(term2, index);
-        search2.print_TF_IDF();
+//
+//        System.out.println("Query: " + term1);
+//        WikiSearch search1 = search(term1, index);
+//        search1.print_TF_IDF();
+//
+//        // search for the second term
+//        String term2 = "programming";
+//        System.out.println("Query: " + term2);
+//        WikiSearch search2 = search(term2, index);
+//        search2.print_TF_IDF();
 
         // compute the intersection of the searches
 //        System.out.println("Query: " + term1 + " AND " + term2);

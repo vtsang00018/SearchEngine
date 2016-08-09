@@ -21,6 +21,7 @@ public class JedisUniqueWordIndexerTest {
         Jedis jedis = JedisMaker.make_local();
 
         unique_word_index = new JedisUniqueWordIndexer(jedis);
+        unique_word_index.resetUniqueIndexer();
     }
 
     @Test
