@@ -40,6 +40,37 @@ public class WikiFetcher {
     }
 
     /**
+     *
+     * Fetches and parses a URL string, returns the heading of the Wikipedia page
+     * @param url: URL of the Wikipedia Page
+     * @return Heading of the Wikipedia Page
+     * @throws IOException
+     */
+    public String getHeading(String url) throws IOException{
+//        sleepIfNeeded();
+
+        Connection conn = Jsoup.connect(url);
+        Document doc = conn.get();
+
+        return doc.getElementById("firstHeading").text();
+
+    }
+
+//    public String getImageURL(String url) throws IOException{
+//        Connection conn = Jsoup.connect()
+//        Element imgURL =
+//        Elements elts = paragraph.select("a[href]");
+//        for (Element elt: elts) {
+//            String relURL = elt.attr("href");
+//
+//            if (relURL.startsWith("/wiki/")) {
+//                String absURL = "https://en.wikipedia.org" + relURL;
+//                //System.out.println(absURL);
+//                queue.offer(absURL);
+//            }
+//        }
+//    }
+    /**
      * Reads the contents of a Wikipedia page from src/resources.
      *
      * @param url
@@ -62,6 +93,7 @@ public class WikiFetcher {
         Elements paras = content.select("p");
         return paras;
     }
+
 
     /**
      * Rate limits by waiting at least the minimum interval between requests.
