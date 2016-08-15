@@ -58,11 +58,11 @@
       <div class="icon-list">
         <a href="#home" class="logo page-scroll waves-effect">Wiki Search</a>
         <a href="#about-us" class="page-scroll waves-effect"><i class="fa fa-fw fa-user"></i><span>About Us</span></a>
-        <a href="#portfolio" class="page-scroll waves-effect"><i class="fa fa-fw fa-bell-o"></i><span>Portfolio</span></a>
+        <%--<a href="#portfolio" class="page-scroll waves-effect"><i class="fa fa-fw fa-bell-o"></i><span>Portfolio</span></a>--%>
         <!-- <a href="#service" class="page-scroll waves-effect"><i class="fa fa-fw fa-bar-chart-o"></i><span>Services</span></a> -->
         <a href="#team" class="page-scroll waves-effect"><i class="fa fa-fw fa-users"></i><span>Our Team</span></a>
-        <a href="#latest-news" class="page-scroll waves-effect"><i class="fa fa-fw fa-mortar-board"></i><span>Challenges</span></a>
         <a href="#search" class="page-scroll waves-effect"><i class="fa fa-fw fa-comment-o"></i><span>Wiki Search</span></a>
+        <a href="#latest-news" class="page-scroll waves-effect"><i class="fa fa-fw fa-mortar-board"></i><span>Challenges</span></a>
         <!-- <a href="#contact" class="page-scroll waves-effect"><i class="fa fa-fw fa-envelope-o"></i><span>Contact</span></a> -->
       </div>
     </nav>
@@ -100,36 +100,37 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <%--<div class="row">--%>
 
-        <div class="col-md-4 col-sm-4">
-          <div class="welcome-section text-center waves-effect">
-            <img src="assets/images/photo-2.jpg" class="img-responsive" alt="..">
-            <h4>Philosophy</h4>
-            <div class="border"></div>
-            <!-- <p>Duis aute irure dolor in reprehen derit in voluptate velit essecillum dolore eu fugiat nulla pariatur. Lorem reprehenderit</p> -->
-          </div>
-        </div>
+        <%--<div class="col-md-4 col-sm-4">--%>
+          <%--<div class="welcome-section text-center waves-effect">--%>
+            <%--<img src="assets/images/photo-2.jpg" class="img-responsive" alt="..">--%>
+            <%--<h4>Philosophy</h4>--%>
+            <%--<div class="border"></div>--%>
+            <%--<!-- <p>Duis aute irure dolor in reprehen derit in voluptate velit essecillum dolore eu fugiat nulla pariatur. Lorem reprehenderit</p> -->--%>
+          <%--</div>--%>
+        <%--</div>--%>
 
-        <div class="col-md-4 col-sm-4">
-          <div class="welcome-section text-center waves-effect">
-            <img src="assets/images/photo-1.jpg" class="img-responsive" alt="..">
-            <h4>Our Mission & Vission</h4>
-            <div class="border"></div>
-            <!-- <p>Duis aute irure dolor in reprehen derit in voluptate velit essecillum dolore eu fugiat nulla pariatur. Lorem reprehenderit</p> -->
-          </div>
-        </div>
+        <%--<div class="col-md-6 col-sm-6 col-md-offset-2">--%>
+          <%--<div class="welcome-section text-center waves-effect">--%>
+            <%--<img src="assets/images/photo-1.jpg" class="img-responsive" alt="..">--%>
+            <%--<h4>Our Mission & Vission</h4>--%>
+            <%--<div class="border"></div>--%>
+            <%--<p>We wanted to improve our Software Engineering abilities by developing a Search Engine which queries Wikipedia Pages</p>--%>
+            <%--<!-- <p>Duis aute irure dolor in reprehen derit in voluptate velit essecillum dolore eu fugiat nulla pariatur. Lorem reprehenderit</p> -->--%>
+          <%--</div>--%>
+        <%--</div>--%>
 
-        <div class="col-md-4 col-sm-4">
-          <div class="welcome-section text-center waves-effect">
-            <img src="assets/images/photo-3.jpg" class="img-responsive" alt="..">
-            <h4>Value & Rules</h4>
-            <div class="border"></div>
-            <!-- <p>Duis aute irure dolor in reprehen derit in voluptate velit essecillum dolore eu fugiat nulla pariatur. Lorem reprehenderit</p> -->
-          </div>
-        </div>
+        <%--<div class="col-md-6 col-sm-6">--%>
+          <%--<div class="welcome-section text-center waves-effect">--%>
+            <%--<img src="assets/images/photo-3.jpg" class="img-responsive" alt="..">--%>
+            <%--<h4>Value & Rules</h4>--%>
+            <%--<div class="border"></div>--%>
+            <%--<!-- <p>Duis aute irure dolor in reprehen derit in voluptate velit essecillum dolore eu fugiat nulla pariatur. Lorem reprehenderit</p> -->--%>
+          <%--</div>--%>
+        <%--</div>--%>
 
-      </div><!-- /.row -->
+     <%--</div><!-- /.row -->--%>
 
     </div><!-- /.container -->
   </section>
@@ -155,9 +156,9 @@
             <li>
               <div class="after-li">
                 <div class="singel-hr">
-                  <div class="singel-hr-inner waves-effect" data-height="90%"></div>
+                  <div class="singel-hr-inner waves-effect" data-height="100%"></div>
                   <div class="skill-visiable">
-                    <span class="skill-count">90%</span>
+                    <span class="skill-count">100%</span>
                   </div>
                   <span class="skill-title">March</span>
                 </div>
@@ -169,9 +170,9 @@
             <li>
               <div class="after-li">
                 <div class="singel-hr">
-                  <div class="singel-hr-inner waves-effect" data-height="100%"></div>
+                  <div class="singel-hr-inner waves-effect" data-height="50%"></div>
                   <div class="skill-visiable">
-                    <span class="skill-count">100%</span>
+                    <span class="skill-count">50%</span>
                   </div>
                   <span class="skill-title">April</span>
                 </div>
@@ -183,11 +184,25 @@
             <li>
               <div class="after-li">
                 <div class="singel-hr">
-                  <div class="singel-hr-inner waves-effect" data-height="80%"></div>
+                  <div class="singel-hr-inner waves-effect" data-height="20%"></div>
                   <div class="skill-visiable">
-                    <span class="skill-count">80%</span>
+                    <span class="skill-count">20%</span>
                   </div>
                   <span class="skill-title">May</span>
+                </div>
+              </div>
+            </li>
+            <!-- /single skill-->
+
+            <!-- single skill -->
+            <li>
+              <div class="after-li">
+                <div class="singel-hr">
+                  <div class="singel-hr-inner waves-effect" data-height="50%"></div>
+                  <div class="skill-visiable">
+                    <span class="skill-count">50%</span>
+                  </div>
+                  <span class="skill-title">June</span>
                 </div>
               </div>
             </li>
@@ -201,20 +216,6 @@
                   <div class="skill-visiable">
                     <span class="skill-count">60%</span>
                   </div>
-                  <span class="skill-title">June</span>
-                </div>
-              </div>
-            </li>
-            <!-- /single skill-->
-
-            <!-- single skill -->
-            <li>
-              <div class="after-li">
-                <div class="singel-hr">
-                  <div class="singel-hr-inner waves-effect" data-height="85%"></div>
-                  <div class="skill-visiable">
-                    <span class="skill-count">85%</span>
-                  </div>
                   <span class="skill-title">July</span>
                 </div>
               </div>
@@ -225,9 +226,9 @@
             <li>
               <div class="after-li">
                 <div class="singel-hr">
-                  <div class="singel-hr-inner waves-effect" data-height="80%"></div>
+                  <div class="singel-hr-inner waves-effect" data-height="100%"></div>
                   <div class="skill-visiable">
-                    <span class="skill-count">80%</span>
+                    <span class="skill-count">100%</span>
                   </div>
                   <span class="skill-title">August</span>
                 </div>
@@ -248,12 +249,12 @@
                 <div class="panel-heading waves-effect">
                   <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapse-1">
-                      <i class="fa fa-angle-left control-icon"></i>Challenges
+                      <i class="fa fa-angle-left control-icon"></i>Goals
                     </a>
                   </h4>
                 </div>
                 <div id="collapse-1" class="panel-collapse collapse in">
-                  <div class="panel-body">Our first challenge was:</div>
+                  <div class="panel-body">Build a basic web crawler to crawl valid Wikipedia Pages</div>
                 </div>
               </div>
               <!-- End Accordion 1 -->
@@ -263,12 +264,13 @@
                 <div class="panel-heading waves-effect">
                   <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapse-2" class="collapsed">
-                      <i class="fa fa-angle-left control-icon"></i>Challenge 2
+                      <i class="fa fa-angle-left control-icon"></i>Goal 2
                     </a>
                   </h4>
                 </div>
                 <div id="collapse-2" class="panel-collapse collapse">
-                  <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec iaculis metus vitae ligula elementum ut luctus lorem facilisis. Sed non leo nisl, ac euismod nisi. Aenean augue dolor, facilisis id fringilla ut, tempus vitae nibh.</div>                               </div>
+                  <div class="panel-body">Build an indexer that indexes crawled pages</div>
+                </div>
               </div>
               <!-- End Accordion 2 -->
 
@@ -277,12 +279,12 @@
                 <div class="panel-heading waves-effect">
                   <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapse-3" class="collapsed">
-                      <i class="fa fa-angle-left control-icon"></i> Challenge 3
+                      <i class="fa fa-angle-left control-icon"></i> Goal 3
                     </a>
                   </h4>
                 </div>
                 <div id="collapse-3" class="panel-collapse collapse">
-                  <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec iaculis metus vitae ligula elementum ut luctus lorem facilisis. Sed non leo nisl, ac euismod nisi. Aenean augue dolor, facilisis id fringilla ut, tempus vitae nibh.</div>
+                  <div class="panel-body">Rank Wikipedia Pages using TF-IDF cosine similarities</div>
                 </div>
               </div>
               <!-- End Accordion 3 -->
@@ -292,12 +294,12 @@
                 <div class="panel-heading waves-effect">
                   <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapse-4" class="collapsed">
-                      <i class="fa fa-angle-left control-icon"></i> What we did
+                      <i class="fa fa-angle-left control-icon"></i> Goal 4
                     </a>
                   </h4>
                 </div>
                 <div id="collapse-4" class="panel-collapse collapse">
-                  <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec iaculis metus vitae ligula elementum ut luctus lorem facilisis. Sed non leo nisl, ac euismod nisi. Aenean augue dolor, facilisis id fringilla ut, tempus vitae nibh.</div>
+                  <div class="panel-body">Retrive the most relevant Wikipedia pages based on an inputted query and therefore presenting it to our user with the help of a web application</div>
                 </div>
               </div>
               <!-- End Accordion 4 -->
@@ -311,6 +313,7 @@
     </div>
   </div>
   <!-- End About Us Section 2 -->
+
 
 
   <!-- Start Fun Facts Section -->
@@ -364,33 +367,23 @@
       </div>
 
       <div class="row">
-        <div class="col-md-6 col-sm-12">
+        <div class="col-md-4 col-md-offset-2">
           <div class="team-member">
-            <img src="assets/images/team/face_1.png" class="img-responsive" alt="">
+            <img src="assets/images/vincent.png" class="img-responsive" alt="">
             <div class="team-details">
               <h4>Vincent Tsang</h4>
               <div class="designation">Tufts University</div>
-              <p class="description"></p>
-              <ul>
-                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-              </ul>
+              <p class="description">Rising Junior</p>
             </div>
           </div>
         </div>
-        <div class="col-md-6 col-sm-12">
+        <div class="col-md-4">
           <div class="team-member">
-            <img src="assets/images/team/face_2.png" class="img-responsive" alt="">
+            <img src="assets/images/aishani.jpg" class="img-responsive" alt="">
             <div class="team-details">
               <h4>Aishani Bhalla</h4>
               <div class="designation">University at Buffalo, SUNY</div>
-              <p class="description"></p>
-              <ul>
-                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-              </ul>
+              <p class="description">Rising Junior</p>
             </div>
           </div>
         </div>
@@ -416,7 +409,22 @@
   </section>
   <!-- End Call to Action Section -->
 
+  <!--Start Image Section -->
+  <section id="image" class="imageSearch">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h1>Wiki Image Search</h1>
+          <form method="post" action="WikiImagePath" class="search-form" enctype="multipart/form-data">
+            <input class="bg-primary" name="fileName" value="Choose Image" type="file" style="display: inline">
+            <input type="submit" value="Upload">
+          </form>
+        </div>
+      </div>
+    </div>
 
+  </section>
+  <!-- End Image Section -->
 
   <!-- Start Latest News Section -->
   <section id="latest-news" class="latest-news-section">
@@ -424,8 +432,8 @@
       <div class="row">
         <div class="col-md-12">
           <div class="section-title text-center">
-            <h2>Challenges</h2>
-            <p>Duis aute irure dolor in reprehenderit in voluptate</p>
+            <h2>Challenges and Next Steps</h2>
+            <p>We struggled... while having fun</p>
           </div>
         </div>
       </div>
@@ -433,29 +441,37 @@
         <div class="latest-news">
           <div class="col-md-4 col-sm-4">
             <div class="latest-post waves-effect">
-              <img src="assets/images/post-1.jpg" class="img-responsive" alt="">
-              <h4><a href="#">Standard Post with Image</a></h4>
+              <%--<img src="assets/images/post-1.jpg" class="img-responsive" alt="">--%>
+              <h4>Technical Challenges</h4>
 
-              <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-              <a class="btn btn-primary">Read More</a>
+                <ul>
+                  <li>Google Vision API</li>
+                  <li>Optimizing Search</li>
+                  <li>Modular and encapsulated design (design first, then implement!)</li>
+                </ul>
             </div>
           </div>
           <div class="col-md-4 col-sm-4">
             <div class="latest-post waves-effect">
-              <img src="assets/images/post-2.jpg" class="img-responsive" alt="">
-              <h4><a href="#">Standard Post with Image</a></h4>
+              <%--<img src="assets/images/post-2.jpg" class="img-responsive" alt="">--%>
+              <h4>Non-Technical Challenges</h4>
 
-              <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-              <a class="btn btn-primary">Read More</a>
+              <ul>
+                <li>Collaborating remotely from different time zones</li>
+                <li>Working without mentors</li>
+                <li>Balancing time and energy due to internships</li>
+              </ul>
             </div>
           </div>
           <div class="col-md-4 col-sm-4">
             <div class="latest-post waves-effect">
-              <img src="assets/images/post-3.jpg" class="img-responsive" alt="">
-              <h4><a href="#">Standard Post with Image</a></h4>
-
-              <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-              <a class="btn btn-primary">Read More</a>
+              <%--<img src="assets/images/post-3.jpg" class="img-responsive" alt="">--%>
+              <h4>Next Step/Future</h4>
+                <ul>
+                  <li>Redesign the search engine using scalable design patterns</li>
+                  <li>Image label searching with Google Vision API</li>
+                  <li>Extending search beyond Wikipedia</li>
+                </ul>
             </div>
           </div>
 

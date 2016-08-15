@@ -90,7 +90,7 @@
 
         List<Map.Entry<String, Double>> entries = wSearch.sort_TF_IDF();
     %>
-    <div class="page-header"> <h2>You requested for:<strong><%= searchTerm %></strong></h2> </div>
+    <div class="page-header"> <h2><strong><%= searchTerm %></strong></h2></div>
     <div class="searchResult">
         <ul class="search-list">
             <%
