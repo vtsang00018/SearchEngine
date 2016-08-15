@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "wikisearchengine39",
+  "private_key_id": "7b4a5a51b383ca0fc34fc0dfb65ca8771d06f443",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCnR0jrUxPT2rFd\n1O94V/08JcqtkuoC5tGScmOBYOgQekqnWEWE8VF1sg6Ucxm2gTB1m1A2EhkyLO0n\ndgxfIQo8L4t2DD0D01CBK7JGYu/D8U05m0ZB5tGFilGM3YSOA/tQsBfDERlXnnJA\nUMVQYeIrRP38pr6eC0esDhfuEHye9mkHE7x+PUrBHxqdch0dcN2goAPrBN+KLDql\nkWTj5T9u2gUiVjLB66PvWx0gOiqd3rV5H13TfxyYsY1VFshPVsqMR9nHkIZFxaLO\nQ6C3uyNn3bnz4GGN+jXU/qUx8mRoEp1hKImJydRcwfMfbfQw/W+jX3ApA08hHD5p\nsVkGj3QlAgMBAAECggEAW8mwyHfgpFoXAw7JjDZz3SI7kXzQ7WCsVHhyA1ciX5BL\nEIJOO0GTWkqm12xFCrDe31mm7NSHgNHIG+QZq8VccWQBWXgjrsqwHQDWJOs690Cc\nCGUcayL1ixo331zZ1Hd42nCVyVLDniFyPbpUWuQrD2UfHRh99gjofg+Jr/bZ+vsF\nynseJxJC2Ap8Fu3/3kHTRTW0T7AxOs2uQH13GbW3J6BIFVXyzl1ewAGy1SY10l0D\n+Xx6155kmflxYVeirQN4HuoOFhCw3TTOL+K1AiwYEPrSxzy0k+M2zlI61Nidfu6M\n3ujm4tdVTBFsIkWT8Kv1yKtBQsp/4qqe4TqWTEKRzQKBgQDSWgMsW4XFtTTUlOSN\ncDqvpPt0MwOq0jxkzsQAOrLf4IIsNSxhRTjRGO5zgStn8ni3jbXgcgUs2Zdx3CvN\nKGQyC+OCrpqEnSj/KZlfThMzlvFQ7V8LYuPOcRVAB1l+i2IqVip5zpgmjqtpPPYM\nXWChvTSu+tIMZry89E1D9g3NUwKBgQDLlFzvtiqGYCgtjH/uHPNsM4TFq2abZoMs\nVrN7zY+fqmx+eGLNsMdRXzsWlxk32wKf+661+1kWtIe8ExNuGi68DNop8vZXcPHt\nU0MXHRBYy/9/XvenGuhs8j7FJ/P3cREJ+uX8rt6sJo4/T134XnVw6mjYccXrEM5k\nR5Ik+eQRpwKBgHoYdS8SEJupini508+lDOtWv/26fq5wSU3aFjpr19fK4MP4OUJc\ng5Ya+o1gtGkpfJhOUPtuM0LNKfKU8Xersjy6WdxIrLe84Ub6RmPjVZHkUz2+CiT5\nyXDSgpsfqPqivOAGE7GQERCQTz5OfCLBMI2w3RuTysgX+gVTaGXCNFCxAoGBAI11\ni1qaJ1R2TpTP8zke7tq5tcGxBzxmcDGIEXGudeVJg9ghiO5Kr0VQuftJhSF10o4e\nUdlsTQxk54h9bNvt35mWCKZriFdcSQ9S8uSFso0xO1ljQQzhuq2xaoKO74x6CY/4\nwoThciMHK4K8gJyL7mlGyRHVhOSBKhkuTlPZPGwzAoGBALtnt/w0qrm3bV3NjisP\nUYG7Mn0Si/+UpIyDdOxrgATUyjKDa5I28XJMJvd5RlmBLlga4vSw6+kdSFZxMp2u\ntqsNdsstRwBaGjV/Pyv9r7DDwR/7Clns31UNg6mHdMwalTFeW2+73/gfierzUKYi\nhYOSbZuVHgxVdGRKOHGYNBMA\n-----END PRIVATE KEY-----\n",
+  "client_email": "wikisearch@wikisearchengine39.iam.gserviceaccount.com",
+  "client_id": "105958703580957552478",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/wikisearch%40wikisearchengine39.iam.gserviceaccount.com"
+}
