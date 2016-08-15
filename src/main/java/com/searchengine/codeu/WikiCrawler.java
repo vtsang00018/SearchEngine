@@ -54,7 +54,7 @@ public class WikiCrawler {
      */
     public String crawl(boolean testing) throws IOException {
         // 20k indexes is around 2.2 gb
-        int threshold = 60;
+        int threshold = 200;
         if (queue.isEmpty() || index.urls_exceeds_threshold(threshold)) {
             return null;
         }
@@ -136,7 +136,18 @@ public class WikiCrawler {
 //              "https://en.wikipedia.org/wiki/Purple",
 //                "https://en.wikipedia.org/wiki/Rose",
 //                "https://en.wikipedia.org/wiki/Wine",
-                "https://en.wikipedia.org/wiki/Google"
+//                "https://en.wikipedia.org/wiki/Google",
+//                "https://en.wikipedia.org/wiki/Pet",
+//                 "https://en.wikipedia.org/wiki/Dog",
+//                "https://en.wikipedia.org/wiki/Mammal",
+//                "https://en.wikipedia.org/wiki/Google_self-driving_car",
+//                "https://en.wikipedia.org/wiki/Machine_learning"
+//                "https://en.wikipedia.org/wiki/Cat",
+//                "https://en.wikipedia.org/wiki/Whiskers",
+//                "https://en.wikipedia.org/wiki/Jungle",
+//                "https://en.wikipedia.org/wiki/Cartoon",
+//                "https://en.wikipedia.org/wiki/Habitat"
+                
         };
         wc.queue_seed_urls(urls_seeds);
 

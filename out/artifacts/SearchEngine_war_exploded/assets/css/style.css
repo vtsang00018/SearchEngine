@@ -1264,9 +1264,39 @@ and (min-width : 551px){
     //background: transparent;
 }
 
+/*----------------------------------------------------------------*/
+/* Start Image Search Section */
+/*----------------------------------------------------------------*/
 
+.imageSearch {
+    background: url(../images/parallax/call-to.jpg);
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: 50% 90%;
+    color: #fff;
+    text-align: center;
+    padding: 80px 0;
+}
 
+.imageSearch h1 {
+    font-weight: 300;
+    line-height: 50px;
+    padding-bottom: 40px;
+}
 
+.imageSearch h1 strong {
+    color: #28ABE3;
+    font-weight: 600;
+}
+
+.imageSearch .btn-primary {
+    padding: 20px;
+    font-size: 16px;
+}
+
+.imageSearch .btn-primary:hover {
+//background: transparent;
+}
 
 
 

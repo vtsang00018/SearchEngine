@@ -173,7 +173,9 @@ public class WikiSearch {
         // Display elements
         while(i.hasNext()) {
             Entry<String, Double> entry = (Entry<String, Double>)i.next();
-            list.add(entry);
+            if (entry.getValue() > 0.01){
+                list.add(entry);
+            }
         }
         Collections.sort(list, comparator);
         return list;
